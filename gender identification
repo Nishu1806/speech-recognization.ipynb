@@ -1,0 +1,76 @@
+#importin libraries
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import gc
+import IPython.display as ipd
+import librosa as libr
+
+bengali = "/input /Bengali/"
+gujrati = "/input/Gujarati/"
+hindi = "/input/Hindi/"
+kannada = "/input/Kannada/"
+marathi = '/input/Marathi/'
+urdu = '/input/Urdu/'
+
+work_dir = './'
+
+filename = '10'
+
+data, sample_rate = libr.load(hindi+filename)
+
+data.shape
+
+sample_rate
+
+# Gender Identification
+import matplotlib.pyplot as plt
+import tensorflow as tf
+import seaborn as sb
+
+df= pd.read_csv('gender_classification_v7.csv')
+
+df.head()
+
+df['gender'].replace({"Male":0,"Female":1},inplace=True)
+
+df.describe()
+
+for col in df:
+    print(col,df[col].isnull().any().sum())
+sb.heatmap(df.corr(), cmap="Blues", annot=True)
+
+y = df['gender'] #labels
+
+X = df.drop('gender',axis=1)
+
+X.shape
+
+y.shape
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+X_train.head()
+from sklearn.ensemble import RandomForestClassifier
+
+classifier = RandomForestClassifier(random_state=42)
+
+classifier.fit(X_train, y_train) 
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+y_pred = classifier.predict(X_test)  # X_test is the testing data
+
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# You can also get a detailed classification report and confusion matrix
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+new_sample_features = [[1, 15.2, 8.5, 0, 1, 1, 2.5]]
+predicted_gender = classifier.predict(new_sample_features)
+print("Predicted Gender:", predicted_gender)
